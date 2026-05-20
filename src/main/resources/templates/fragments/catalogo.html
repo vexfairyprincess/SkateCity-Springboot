@@ -64,14 +64,17 @@
 
             <div class="product-grid" th:if="${not #lists.isEmpty(productos)}">
                 <article class="product-card" th:each="producto : ${productos}">
-                    <img th:src="${producto.imagen}" th:alt="${producto.nombre}">
-                    <div>
-                        <span th:text="${producto.categoria.nombre}"></span>
-                        <h3 th:text="${producto.nombre}"></h3>
-                        <p th:text="${'$' + producto.precio}"></p>
+                    <a class="product-image-link" th:href="@{/productos/{id}(id=${producto.id})}">
+                        <img th:src="${producto.imagen}" th:alt="${producto.nombre}">
+                    </a>
+                    <div class="product-card-body">
+                        <div class="product-meta-row">
+                            <span class="product-category" th:text="${producto.categoria.nombre}"></span>
+                            <strong class="product-price" th:text="${'$' + producto.precio}"></strong>
+                        </div>
+                        <h3 class="product-title" th:text="${producto.nombre}"></h3>
                         <div class="card-actions">
                             <a class="button secondary" th:href="@{/productos/{id}(id=${producto.id})}">Ver detalle</a>
-                            <button class="button add-to-cart" type="button">Agregar</button>
                         </div>
                     </div>
                 </article>

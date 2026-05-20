@@ -16,16 +16,16 @@ class CatalogoServiceTest {
 
     @Test
     void cargaProductosYCategoriasDesdeLasSemillas() {
-        assertThat(catalogoService.listarProductos()).hasSize(20);
+        assertThat(catalogoService.listarProductos()).hasSize(21);
         assertThat(catalogoService.listarCategorias()).hasSize(5);
         assertThat(catalogoService.obtenerDestacados()).hasSize(4);
     }
 
     @Test
     void buscaProductosPorNombreYCategoria() {
-        assertThat(catalogoService.buscarProductos("Tabla", 1L))
+        assertThat(catalogoService.buscarProductos("Santa Cruz", 1L))
                 .isNotEmpty()
-                .allMatch(producto -> producto.getNombre().contains("Tabla"))
+                .allMatch(producto -> producto.getNombre().contains("Santa Cruz"))
                 .allMatch(producto -> producto.getCategoria().getId().equals(1L));
     }
 }

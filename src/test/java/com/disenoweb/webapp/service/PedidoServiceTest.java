@@ -31,9 +31,9 @@ class PedidoServiceTest {
         Pedido pedido = pedidoService.crearPedido(form);
 
         assertThat(pedido.getId()).isNotNull();
-        assertThat(pedido.getTotal()).isEqualByComparingTo(new BigDecimal("170.00"));
+        assertThat(pedido.getTotal()).isEqualByComparingTo(new BigDecimal("109.96"));
         assertThat(pedido.getDetalles()).hasSize(1);
-        assertThat(pedido.getDetalles().get(0).getPrecioUnitario()).isEqualByComparingTo(new BigDecimal("85.00"));
+        assertThat(pedido.getDetalles().get(0).getPrecioUnitario()).isEqualByComparingTo(new BigDecimal("54.98"));
         assertThat(pedidoRepository.findById(pedido.getId())).isPresent();
     }
 

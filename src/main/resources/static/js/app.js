@@ -1,30 +1,151 @@
 document.addEventListener('DOMContentLoaded', () => {
     const countEl = document.querySelector('#cart-count');
     const toast = document.querySelector('#toast');
-    let count = 0;
 
-    const bindAddToCart = (scope = document) => {
-        scope.querySelectorAll('.add-to-cart').forEach((button) => {
-            if (button.dataset.bound === 'true') {
-                return;
+    const money = (value) => `$${Number(value).toFixed(2)}`;
+
+    const updateCartCount = (value) => {
+        if (countEl) {
+            countEl.textContent = String(value);
+        }
+    };
+
+    const showMessage = (message) => {
+        const messageEl = document.querySelector('[data-cart-message]');
+        if (messageEl) {
+            messageEl.textContent = message;
+            messageEl.hidden = false;
+        }
+        if (toast) {
+            toast.textContent = message;
+            toast.hidden = false;
+            window.setTimeout(() => {
+                toast.hidden = true;
+            }, 2200);
+        }
+    };
+
+    const postCartAction = async (url, body = null) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body
+        });
+
+        if (!response.ok) {
+            throw new Error('No se pudo actualizar el carrito.');
+        }
+
+        return response.json();
+    };
+
+    const bindProductDetailCart = () => {
+        const form = document.querySelector('[data-product-detail-cart]');
+        if (!form) {
+            return;
+        }
+
+        const quantityInput = form.querySelector('[data-detail-quantity]');
+        const currentQuantity = form.querySelector('[data-product-current-quantity]');
+
+        const normalizeQuantity = () => {
+            const value = Math.max(1, Number(quantityInput.value) || 1);
+            quantityInput.value = String(value);
+            return value;
+        };
+
+        form.querySelector('[data-detail-decrease]').addEventListener('click', () => {
+            quantityInput.value = String(Math.max(1, normalizeQuantity() - 1));
+        });
+
+        form.querySelector('[data-detail-increase]').addEventListener('click', () => {
+            quantityInput.value = String(normalizeQuantity() + 1);
+        });
+
+        quantityInput.addEventListener('input', normalizeQuantity);
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const params = new URLSearchParams();
+            params.set('cantidad', String(normalizeQuantity()));
+
+            const data = await postCartAction(form.action, params);
+            updateCartCount(data.cantidadCarrito);
+            if (currentQuantity && data.item) {
+                currentQuantity.textContent = String(data.item.cantidad);
             }
-            button.dataset.bound = 'true';
-            button.addEventListener('click', () => {
-                count += 1;
-                if (countEl) {
-                    countEl.textContent = String(count);
-                }
-                if (toast) {
-                    toast.hidden = false;
-                    window.setTimeout(() => {
-                        toast.hidden = true;
-                    }, 2200);
-                }
-            });
+            showMessage(data.mensaje);
         });
     };
 
-    bindAddToCart();
+    const toggleCartEmptyState = (empty) => {
+        const emptyEl = document.querySelector('[data-cart-empty]');
+        const layoutEl = document.querySelector('[data-cart-layout]');
+        if (emptyEl) {
+            emptyEl.hidden = !empty;
+        }
+        if (layoutEl) {
+            layoutEl.hidden = empty;
+        }
+    };
+
+    const updateCartPage = (data, row = null) => {
+        updateCartCount(data.cantidadCarrito);
+
+        const totalEl = document.querySelector('[data-cart-total]');
+        if (totalEl) {
+            totalEl.textContent = money(data.total);
+        }
+
+        if (row && data.item) {
+            const quantityEl = row.querySelector('[data-cart-item-quantity]');
+            const subtotalEl = row.querySelector('[data-cart-item-subtotal]');
+            if (quantityEl) {
+                quantityEl.textContent = String(data.item.cantidad);
+            }
+            if (subtotalEl) {
+                subtotalEl.textContent = money(data.item.subtotal);
+            }
+        }
+
+        toggleCartEmptyState(data.carritoVacio);
+        showMessage(data.mensaje);
+    };
+
+    const bindCartPage = () => {
+        document.querySelectorAll('[data-cart-action]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const row = button.closest('[data-cart-row]');
+                const data = await postCartAction(button.dataset.cartAction);
+                updateCartPage(data, row);
+            });
+        });
+
+        document.querySelectorAll('[data-cart-remove-form]').forEach((form) => {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const row = form.closest('[data-cart-row]');
+                const data = await postCartAction(form.action);
+                if (row) {
+                    row.remove();
+                }
+                updateCartPage(data);
+            });
+        });
+
+        const finalizeForm = document.querySelector('[data-cart-finalize-form]');
+        if (finalizeForm) {
+            finalizeForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const data = await postCartAction(finalizeForm.action);
+                document.querySelectorAll('[data-cart-row]').forEach((row) => row.remove());
+                updateCartPage(data);
+            });
+        }
+    };
 
     const bindLiveCatalog = (root) => {
         const form = root.querySelector('[data-catalog-form]');
@@ -79,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentResults = root.querySelector('[data-catalog-results]');
                 if (nextResults && currentResults) {
                     currentResults.replaceWith(nextResults);
-                    bindAddToCart(root);
                 }
 
                 if (nameInput) {
@@ -149,6 +269,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (liveCatalog) {
         bindLiveCatalog(liveCatalog);
     }
+
+    bindProductDetailCart();
+    bindCartPage();
 
     const form = document.querySelector('#pedido-form');
     if (form) {

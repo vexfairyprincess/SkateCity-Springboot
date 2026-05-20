@@ -3,7 +3,9 @@ package com.disenoweb.webapp.web;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -43,6 +46,11 @@ class TiendaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("pedido-form"))
                 .andExpect(model().attributeExists("pedidoForm", "productos"));
+
+        mockMvc.perform(get("/carrito"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("carrito"))
+                .andExpect(model().attributeExists("items", "total", "carritoVacio"));
     }
 
     @Test
@@ -55,12 +63,12 @@ class TiendaControllerTest {
     @Test
     void filtraProductosPorNombreYCategoriaYMantieneFiltros() throws Exception {
         mockMvc.perform(get("/productos")
-                        .param("nombre", "Tabla")
+                        .param("nombre", "Santa Cruz")
                         .param("categoriaId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("productos"))
                 .andExpect(model().attributeExists("productos", "categorias"))
-                .andExpect(model().attribute("nombre", "Tabla"))
+                .andExpect(model().attribute("nombre", "Santa Cruz"))
                 .andExpect(model().attribute("categoriaId", 1L))
                 .andExpect(model().attribute("productos", not(empty())));
     }
@@ -72,5 +80,40 @@ class TiendaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("productos"))
                 .andExpect(model().attribute("productos", empty()));
+    }
+
+    @Test
+    void agregaEliminaYFinalizaCarrito() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+
+        mockMvc.perform(post("/carrito/agregar/1")
+                        .header("Referer", "/productos")
+                        .session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/productos"));
+
+        mockMvc.perform(post("/carrito/agregar/1")
+                        .header("Referer", "/productos")
+                        .session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/productos"));
+
+        mockMvc.perform(get("/carrito").session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("carrito"))
+                .andExpect(model().attribute("carritoVacio", false));
+
+        mockMvc.perform(post("/carrito/eliminar/1").session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/carrito"));
+
+        mockMvc.perform(post("/carrito/agregar/1")
+                        .header("Referer", "/productos")
+                        .session(session))
+                .andExpect(status().is3xxRedirection());
+
+        mockMvc.perform(post("/carrito/finalizar").session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/carrito"));
     }
 }

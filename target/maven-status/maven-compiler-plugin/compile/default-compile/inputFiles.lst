@@ -1,14 +1,17 @@
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/WebappApplication.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/dto/PedidoForm.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/model/Categoria.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/model/DetallePedido.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/model/Pedido.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/model/Producto.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/repository/CategoriaRepository.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/repository/PedidoRepository.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/repository/ProductoRepository.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/service/CatalogoService.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/service/PedidoService.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/service/ProductoNoEncontradoException.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/service/StockInsuficienteException.java
-/Users/silviomoramendoza/Desktop/untitled folder/src/main/java/com/disenoweb/webapp/web/TiendaController.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/WebappApplication.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/dto/CarritoItem.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/dto/CarritoRespuesta.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/dto/PedidoForm.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/model/Categoria.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/model/DetallePedido.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/model/Pedido.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/model/Producto.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/repository/CategoriaRepository.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/repository/PedidoRepository.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/repository/ProductoRepository.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/service/CarritoService.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/service/CatalogoService.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/service/PedidoService.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/service/ProductoNoEncontradoException.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/service/StockInsuficienteException.java
+/Users/silviomoramendoza/Desktop/segundo corte web/src/main/java/com/disenoweb/webapp/web/TiendaController.java
