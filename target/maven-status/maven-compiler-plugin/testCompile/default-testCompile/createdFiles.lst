@@ -1,0 +1,4 @@
+com/disenoweb/webapp/WebappApplicationTests.class
+com/disenoweb/webapp/service/PedidoServiceTest.class
+com/disenoweb/webapp/service/CatalogoServiceTest.class
+com/disenoweb/webapp/web/TiendaControllerTest.class

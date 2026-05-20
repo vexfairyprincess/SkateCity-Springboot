@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto no encontrado</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main>
+    <section class="success-card">
+        <p class="eyebrow">404</p>
+        <h1>Producto no encontrado</h1>
+        <p>El producto que buscas no existe o ya no está disponible.</p>
+        <a class="button" th:href="@{/productos}">Volver al catálogo</a>
+    </section>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

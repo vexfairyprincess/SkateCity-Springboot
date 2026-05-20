@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <section th:fragment="catalogo" class="catalog-shell" data-live-catalog th:attr="data-clear-url=${catalogClearUrl}">
+        <div class="catalog-header">
+            <div class="section-heading">
+                <p class="eyebrow" th:text="${catalogEyebrow}"></p>
+                <h2 th:text="${catalogTitulo}"></h2>
+            </div>
+            <p class="catalog-copy">Encuentra tablas, ruedas y accesorios al instante.</p>
+        </div>
+
+        <form class="catalog-toolbar row g-3 align-items-end mb-4" method="get" data-catalog-form>
+            <div class="col-12 col-lg-5">
+                <label class="form-label text-white" for="nombre">Buscar por nombre</label>
+                <div class="search-field-row">
+                    <div class="search-input-shell">
+                        <input id="nombre" name="nombre" type="text" class="form-control"
+                            placeholder="Ej. Tabla, casco, ruedas..." autocomplete="off" th:value="${nombre}">
+                        <button class="search-clear-button" type="button" aria-label="Limpiar texto" data-clear-text
+                            th:hidden="${#strings.isEmpty(nombre)}">×</button>
+                    </div>
+                    <button class="search-submit-button" type="submit" aria-label="Buscar">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="col-12 col-md-7 col-lg-4">
+                <label class="form-label text-white" for="categoriaId">Categoría</label>
+                <select id="categoriaId" name="categoriaId" class="form-select">
+                    <option value="">Todas las categorías</option>
+                    <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nombre}"
+                        th:selected="${categoriaId != null and categoria.id == categoriaId}"></option>
+                </select>
+            </div>
+            <div class="col-12 col-lg-3 d-grid gap-2 d-md-flex justify-content-lg-end">
+                <a class="btn btn-outline-light px-4 w-100 w-lg-auto" th:href="${catalogClearUrl}"
+                    data-clear-filters>Limpiar todo</a>
+            </div>
+        </form>
+
+        <div class="catalog-status" data-catalog-results>
+            <div class="catalog-meta">
+                <div class="catalog-chip">
+                    <span class="catalog-chip-label">Nombre</span>
+                    <strong th:text="${#strings.isEmpty(nombre) ? 'Cualquiera' : nombre}"></strong>
+                </div>
+                <div class="catalog-chip">
+                    <span class="catalog-chip-label">Categoría</span>
+                    <strong
+                        th:text="${categoriaNombreSeleccionada == null ? 'Todas' : categoriaNombreSeleccionada}"></strong>
+                </div>
+                <div class="catalog-chip">
+                    <span class="catalog-chip-label">Resultados</span>
+                    <strong th:text="${#lists.size(productos)}"></strong>
+                </div>
+            </div>
+
+            <div class="catalog-empty" th:if="${#lists.isEmpty(productos)}">
+                <h3>No se encontraron productos.</h3>
+                <p>Prueba con otro nombre o cambia la categoría seleccionada.</p>
+            </div>
+
+            <div class="product-grid" th:if="${not #lists.isEmpty(productos)}">
+                <article class="product-card" th:each="producto : ${productos}">
+                    <img th:src="${producto.imagen}" th:alt="${producto.nombre}">
+                    <div>
+                        <span th:text="${producto.categoria.nombre}"></span>
+                        <h3 th:text="${producto.nombre}"></h3>
+                        <p th:text="${'$' + producto.precio}"></p>
+                        <div class="card-actions">
+                            <a class="button secondary" th:href="@{/productos/{id}(id=${producto.id})}">Ver detalle</a>
+                            <button class="button add-to-cart" type="button">Agregar</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

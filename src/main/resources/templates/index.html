@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skate City</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main>
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">Tienda urbana de skate</p>
+            <h1>Domina la calle con estilo</h1>
+            <p>Tablas, ruedas y accesorios para elevar cada sesión con una experiencia de compra rápida, fluida y visual.</p>
+            <div class="hero-actions">
+                <a class="button" th:href="@{/productos}">Explorar productos</a>
+            </div>
+        </div>
+        <div class="hero-art">
+            <div class="hero-badge">New Drop</div>
+            <div>SKATE CITY</div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-heading">
+            <h2>Productos destacados</h2>
+        </div>
+        <div class="product-grid">
+            <article class="product-card" th:each="producto : ${destacados}">
+                <img th:src="${producto.imagen}" th:alt="${producto.nombre}">
+                <div>
+                    <span th:text="${producto.categoria.nombre}"></span>
+                    <h3 th:text="${producto.nombre}"></h3>
+                    <p th:text="${'$' + producto.precio}"></p>
+                    <a class="button secondary" th:href="@{/productos/{id}(id=${producto.id})}">Ver detalle</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <div id="catalogo-inicio" th:replace="~{fragments/catalogo :: catalogo}"></div>
+</main>
+
+<div id="toast" class="toast" hidden>Producto agregado correctamente</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido confirmado | Skate City</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main>
+    <section class="success-card">
+        <p class="eyebrow">Pedido registrado</p>
+        <h1>Gracias, <span th:text="${pedido.nombreCliente}"></span></h1>
+        <p>Tu pedido fue creado correctamente.</p>
+        <p>Total: <strong th:text="${'$' + pedido.total}"></strong></p>
+        <a class="button" th:href="@{/productos}">Volver al catálogo</a>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
